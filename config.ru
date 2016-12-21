@@ -1,3 +1,4 @@
+
 #\ -s puma -o 127.0.0.1 -p 3000 -O Threads=0:16 -O Verbose
 
 file = __FILE__
@@ -6,7 +7,7 @@ file = __FILE__
 end
 
 require 'yaml'
-require 'rack-livereload'
+# require 'rack-livereload'
 require 'puma'
 
 config = {}
@@ -37,7 +38,7 @@ use Rack::Session::Cookie, :key => config[:cookie][:key],
                            :secret => Digest::SHA1.hexdigest(rand.to_s)
 use Headers
 use X_Headers
-use Rack::LiveReload,config[:live_reload]
+# use Rack::LiveReload,config[:live_reload]
 
 use Subdomain_Dispatcher do
   set 'api', API
@@ -45,6 +46,8 @@ use Subdomain_Dispatcher do
   set 'x-headers', X_Headers
 end
 
-run App
+Rack::Handler.pick(config[:server][:handler]).run(App,config[:server][:config])
+
+# run App
 
 
