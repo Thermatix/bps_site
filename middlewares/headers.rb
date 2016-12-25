@@ -15,7 +15,7 @@ class Headers
   end
 
   def self.call(env,key='HEADERS')
-      ['200',{ 'Content-Type'=> 'application/json' },[(env.fetch(key){get_headers(env)}).to_json]]
+    ['200',{ 'Content-Type'=> 'application/json' },[(env.fetch(key){get_headers(env)}.merge(env)).to_json]]
   end
 
 end
