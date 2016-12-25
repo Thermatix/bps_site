@@ -7,7 +7,11 @@ class App < Sinatra::Base
   end
   helpers Helpers
 
-  get '/' do
+  get('/') do
+    erb :index
+  end
+
+  get(/[^\/]/) do
     erb :index
   end
 end
