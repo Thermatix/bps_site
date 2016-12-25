@@ -1,4 +1,3 @@
-
 #\ -s puma -o 127.0.0.1 -p 3000 -O Threads=0:16 -O Verbose
 
 file = __FILE__
@@ -40,14 +39,25 @@ use Headers
 use X_Headers
 # use Rack::LiveReload,config[:live_reload]
 
+use Json_Auto_Parse
+
 use Subdomain_Dispatcher do
+  set_cors_to '*localhost*'do |env|
+    ENV['APP_ENV'] == 'dev'
+  end
   set 'api', API
   set 'headers', Headers
   set 'x-headers', X_Headers
 end
 
-Rack::Handler.pick(config[:server][:handler]).run(App,config[:server][:config])
 
-# run App
+# Rack::Builder = Rack::Handler.pick(config[:server][:handler])
+# run App, config[:server][:config]
+# run Rack::Handler.pick(config[:server][:handler]).run(App,config[:server][:config]).to_app
+map '/api' do
+  run API
+end
+
+run App
 
 
